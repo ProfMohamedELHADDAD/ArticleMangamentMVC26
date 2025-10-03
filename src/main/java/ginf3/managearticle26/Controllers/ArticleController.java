@@ -85,8 +85,7 @@ public class ArticleController extends HttpServlet {
             throws IOException, ServletException {
         String code = request.getParameter("code");
         String designation = request.getParameter("designation");
-        String prixStr = request.getParameter("prix");
-        double prix = prixStr == null || prixStr.isEmpty() ? 0.0 : Double.parseDouble(prixStr);
+        double prix = Double.parseDouble(request.getParameter("prix"));
 
         Article article = new Article(code, designation, prix);
         boolean ok = dao.add(article);
@@ -95,7 +94,7 @@ public class ArticleController extends HttpServlet {
             showForm(request, response, article);
             return;
         }
-        response.sendRedirect(request.getContextPath() + "/app?action=list");
+        response.sendRedirect(request.getContextPath() + "/articles/list");
     }
 
     private void showEditForm(HttpServletRequest request, HttpServletResponse response)
@@ -103,28 +102,27 @@ public class ArticleController extends HttpServlet {
         String code = request.getParameter("code");
         Article a = dao.findByCode(code);
         if (a == null) {
-            response.sendRedirect(request.getContextPath() + "/app?action=list");
+            response.sendRedirect(request.getContextPath() + "/articles/list");
             return;
         }
         showForm(request, response, a);
     }
 
     private void updateArticle(HttpServletRequest request, HttpServletResponse response)
-            throws IOException, ServletException {
+            throws IOException {
         String code = request.getParameter("code");
         String designation = request.getParameter("designation");
         double prix = Double.parseDouble(request.getParameter("prix"));
 
-        Article a = new Article(code, designation, prix);
-        dao.update(a);
-        response.sendRedirect(request.getContextPath() + "/app?action=list");
+        dao.update(new Article(code, designation, prix));
+        response.sendRedirect(request.getContextPath() + "/articles/list");
     }
 
     private void deleteArticle(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
         String code = request.getParameter("code");
         dao.delete(code);
-        response.sendRedirect(request.getContextPath() + "/app?action=list");
+        response.sendRedirect(request.getContextPath() + "/articles/list");
     }
 
     @Override
@@ -136,7 +134,6 @@ public class ArticleController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
-
         processRequest(req, resp);
     }
 }
