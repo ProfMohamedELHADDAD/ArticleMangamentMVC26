@@ -3,7 +3,7 @@ package ginf3.managearticle26.Model;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class DaoArticle implements IDaoTemplate<Article>{
+public class DaoArticle implements IDao<Article> {
 
     private List<Article> articles = new CopyOnWriteArrayList<>();
     private static DaoArticle instance = new DaoArticle();
